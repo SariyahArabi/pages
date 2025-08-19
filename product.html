@@ -344,10 +344,10 @@
           <button class="lang-btn">EN</button>
         </div>
         <div>
-          <a href="index.html" class="nav-link">الرئيسية</a>
-          <a href="#" class="nav-link"></a>
-          <a href="#" class="nav-link"></a>
-          <a href="#" class="primary-btn"></a>
+          <a href="#" class="nav-link">الرئيسية</a>
+          <a href="#" class="nav-link">المنتجات</a>
+          <a href="#" class="nav-link">الإعدادات</a>
+          <a href="#" class="primary-btn">تسجيل الخروج</a>
         </div>
       </div>
     </nav>
@@ -366,17 +366,17 @@
         <div class="form-grid">
           <div class="form-group">
             <label class="form-label">اسم المنتج</label>
-            <input type="text" class="form-input" placeholder="أدخل اسم المنتج" required>
+            <input type="text" class="form-input" id="product-name" placeholder="أدخل اسم المنتج" required>
           </div>
           
           <div class="form-group">
             <label class="form-label">السعر ($)</label>
-            <input type="number" class="form-input" placeholder="السعر" step="0.01" min="0" required>
+            <input type="number" class="form-input" id="product-price" placeholder="السعر" step="0.01" min="0" required>
           </div>
           
           <div class="form-group">
             <label class="form-label">الفئة</label>
-            <select class="form-select" required>
+            <select class="form-select" id="product-category" required>
               <option value="">اختر الفئة</option>
               <option value="design">تصميم</option>
               <option value="development">تطوير</option>
@@ -387,13 +387,13 @@
           
           <div class="form-group">
             <label class="form-label">الكمية المتاحة</label>
-            <input type="number" class="form-input" placeholder="الكمية" min="0" required>
+            <input type="number" class="form-input" id="product-quantity" placeholder="الكمية" min="0" required>
           </div>
         </div>
         
         <div class="form-group">
           <label class="form-label">وصف المنتج</label>
-          <textarea class="form-textarea" placeholder="أدخل وصفًا تفصيليًا للمنتج" required></textarea>
+          <textarea class="form-textarea" id="product-description" placeholder="أدخل وصفًا تفصيليًا للمنتج" required></textarea>
         </div>
         
         <div class="form-group">
@@ -401,7 +401,7 @@
           <div class="file-upload">
             <div class="file-upload-icon">📁</div>
             <div class="file-upload-text">اسحب وأسقط الصورة هنا أو انقر للاختيار</div>
-            <input type="file" accept="image/*">
+            <input type="file" id="product-image" accept="image/*">
           </div>
         </div>
         
@@ -416,7 +416,7 @@
     <div class="card">
       <h2 style="margin-bottom: 1.5rem;">قائمة المنتجات</h2>
       
-      <table class="products-table">
+      <table class="products-table" id="products-table">
         <thead>
           <tr>
             <th>الصورة</th>
@@ -427,46 +427,8 @@
             <th>الإجراءات</th>
           </tr>
         </thead>
-        <tbody>
-          <tr>
-            <td><div style="width: 50px; height: 50px; background: rgba(255,255,255,0.1); border-radius: 6px;"></div></td>
-            <td>تصميم شعار احترافي</td>
-            <td>تصميم</td>
-            <td>$49.99</td>
-            <td>10</td>
-            <td>
-              <div class="table-actions">
-                <button class="action-btn edit">تعديل</button>
-                <button class="action-btn delete">حذف</button>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td><div style="width: 50px; height: 50px; background: rgba(255,255,255,0.1); border-radius: 6px;"></div></td>
-            <td>تطبيق جوال</td>
-            <td>تطوير</td>
-            <td>$299.99</td>
-            <td>5</td>
-            <td>
-              <div class="table-actions">
-                <button class="action-btn edit">تعديل</button>
-                <button class="action-btn delete">حذف</button>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td><div style="width: 50px; height: 50px; background: rgba(255,255,255,0.1); border-radius: 6px;"></div></td>
-            <td>حملة تسويقية</td>
-            <td>تسويق</td>
-            <td>$149.99</td>
-            <td>8</td>
-            <td>
-              <div class="table-actions">
-                <button class="action-btn edit">تعديل</button>
-                <button class="action-btn delete">حذف</button>
-              </div>
-            </td>
-          </tr>
+        <tbody id="products-list">
+          <!-- سيتم إضافة المنتجات هنا ديناميكيًا -->
         </tbody>
       </table>
     </div>
@@ -476,31 +438,136 @@
     document.addEventListener('DOMContentLoaded', function() {
       // Form submission handling
       const productForm = document.getElementById('product-form');
+      const productsList = document.getElementById('products-list');
       
+      // مصفوفة لتخزين المنتجات
+      let products = [];
+      
+      // دالة لإضافة منتج جديد إلى الجدول
+      function addProductToTable(product) {
+        const row = document.createElement('tr');
+        
+        // إنشاء خلية الصورة
+        const imageCell = document.createElement('td');
+        const imageDiv = document.createElement('div');
+        imageDiv.style.width = '50px';
+        imageDiv.style.height = '50px';
+        imageDiv.style.background = 'rgba(255,255,255,0.1)';
+        imageDiv.style.borderRadius = '6px';
+        imageCell.appendChild(imageDiv);
+        
+        // إنشاء خلية اسم المنتج
+        const nameCell = document.createElement('td');
+        nameCell.textContent = product.name;
+        
+        // إنشاء خلية الفئة
+        const categoryCell = document.createElement('td');
+        categoryCell.textContent = product.category;
+        
+        // إنشاء خلية السعر
+        const priceCell = document.createElement('td');
+        priceCell.textContent = `$${product.price}`;
+        
+        // إنشاء خلية الكمية
+        const quantityCell = document.createElement('td');
+        quantityCell.textContent = product.quantity;
+        
+        // إنشاء خلية الإجراءات
+        const actionsCell = document.createElement('td');
+        const actionsDiv = document.createElement('div');
+        actionsDiv.className = 'table-actions';
+        
+        const editButton = document.createElement('button');
+        editButton.className = 'action-btn edit';
+        editButton.textContent = 'تعديل';
+        
+        const deleteButton = document.createElement('button');
+        deleteButton.className = 'action-btn delete';
+        deleteButton.textContent = 'حذف';
+        
+        actionsDiv.appendChild(editButton);
+        actionsDiv.appendChild(deleteButton);
+        actionsCell.appendChild(actionsDiv);
+        
+        // إضافة جميع الخلايا إلى الصف
+        row.appendChild(imageCell);
+        row.appendChild(nameCell);
+        row.appendChild(categoryCell);
+        row.appendChild(priceCell);
+        row.appendChild(quantityCell);
+        row.appendChild(actionsCell);
+        
+        // إضافة الصف إلى الجدول
+        productsList.appendChild(row);
+        
+        // إضافة حدث لحذف المنتج
+        deleteButton.addEventListener('click', function() {
+          const productName = nameCell.textContent;
+          if (confirm(`هل أنت متأكد من حذف المنتج "${productName}"؟`)) {
+            row.remove();
+            // حذف المنتج من المصفوفة
+            products = products.filter(p => p.name !== product.name);
+            alert('تم حذف المنتج بنجاح!');
+          }
+        });
+        
+        // إضافة حدث لتعديل المنتج
+        editButton.addEventListener('click', function() {
+          // ملء النموذح ببيانات المنتج للتعديل
+          document.getElementById('product-name').value = product.name;
+          document.getElementById('product-price').value = product.price;
+          document.getElementById('product-category').value = product.categoryValue;
+          document.getElementById('product-quantity').value = product.quantity;
+          document.getElementById('product-description').value = product.description;
+          
+          // حذف المنتج من الجدول والمصفوفة
+          row.remove();
+          products = products.filter(p => p.name !== product.name);
+          
+          alert('يمكنك الآن تعديل بيانات المنتج');
+        });
+      }
+      
+      // معالجة إرسال النموذج
       productForm.addEventListener('submit', function(e) {
         e.preventDefault();
         
-        // Get form values
-        const productName = this.querySelector('input[type="text"]').value;
-        const productPrice = this.querySelector('input[type="number"]').value;
-        const productCategory = this.querySelector('select').value;
-        const productQuantity = this.querySelector('input[type="number"]:nth-child(2)').value;
-        const productDescription = this.querySelector('textarea').value;
+        // الحصول على قيم الحقول
+        const productName = document.getElementById('product-name').value;
+        const productPrice = document.getElementById('product-price').value;
+        const productCategory = document.getElementById('product-category');
+        const productCategoryText = productCategory.options[productCategory.selectedIndex].text;
+        const productCategoryValue = productCategory.value;
+        const productQuantity = document.getElementById('product-quantity').value;
+        const productDescription = document.getElementById('product-description').value;
         
-        // In a real app, you would send this data to a server
-        console.log('تم إضافة المنتج:', {
-          productName,
-          productPrice,
-          productCategory,
-          productQuantity,
-          productDescription
-        });
+        // التحقق من أن جميع الحقول مملوءة
+        if (!productName || !productPrice || !productCategoryValue || !productQuantity || !productDescription) {
+          alert('يرجى ملء جميع الحقول المطلوبة');
+          return;
+        }
         
-        // Show success message
+        // إنشاء كائن المنتج
+        const product = {
+          name: productName,
+          price: parseFloat(productPrice).toFixed(2),
+          category: productCategoryText,
+          categoryValue: productCategoryValue,
+          quantity: productQuantity,
+          description: productDescription
+        };
+        
+        // إضافة المنتج إلى المصفوفة
+        products.push(product);
+        
+        // إضافة المنتج إلى الجدول
+        addProductToTable(product);
+        
+        // إظهار رسالة النجاح
         alert('تم إضافة المنتج بنجاح!');
         
-        // Reset form
-        this.reset();
+        // إعادة تعيين النموذج
+        productForm.reset();
       });
       
       // Language toggle functionality
@@ -511,39 +578,9 @@
           langButtons.forEach(btn => btn.classList.remove('active'));
           this.classList.add('active');
           
-          // In a real app, you would change the language of the entire page
+          // في تطبيق حقيقي، ستقوم بتغيير لغة الصفحة بالكامل
           const lang = this.textContent.trim();
           console.log('تم تغيير اللغة إلى:', lang);
-        });
-      });
-      
-      // Delete button functionality
-      const deleteButtons = document.querySelectorAll('.action-btn.delete');
-      
-      deleteButtons.forEach(button => {
-        button.addEventListener('click', function() {
-          const productRow = this.closest('tr');
-          const productName = productRow.querySelector('td:nth-child(2)').textContent;
-          
-          if (confirm(`هل أنت متأكد من حذف المنتج "${productName}"؟`)) {
-            productRow.remove();
-            console.log('تم حذف المنتج:', productName);
-            alert('تم حذف المنتج بنجاح!');
-          }
-        });
-      });
-      
-      // Edit button functionality
-      const editButtons = document.querySelectorAll('.action-btn.edit');
-      
-      editButtons.forEach(button => {
-        button.addEventListener('click', function() {
-          const productRow = this.closest('tr');
-          const productName = productRow.querySelector('td:nth-child(2)').textContent;
-          
-          // In a real app, you would populate the form with the product data
-          console.log('تحرير المنتج:', productName);
-          alert(`سيتم فتح نموذج تحرير المنتج: ${productName}`);
         });
       });
     });
