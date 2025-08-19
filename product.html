@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>مشروعك - إدارة المنتجات</title>
+  <title id="page-title">مشروعك - إدارة المنتجات</title>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -300,6 +300,13 @@
       background: rgba(255,255,255,0.1);
     }
     
+    /* Empty state */
+    .empty-state {
+      text-align: center;
+      padding: 2rem;
+      color: var(--muted);
+    }
+    
     /* Responsive */
     @media (max-width: 900px) {
       .navbar {
@@ -326,6 +333,10 @@
         display: block;
         overflow-x: auto;
       }
+      
+      .products-table th, .products-table td {
+        padding: 0.5rem;
+      }
     }
   </style>
 </head>
@@ -335,45 +346,47 @@
     <nav class="navbar">
       <div class="brand">
         <span class="brand-dot"></span>
-        <span>مشروعك</span>
+        <span id="brand-name">مشروعك</span>
       </div>
       
       <div class="nav-links">
         <div class="lang-toggle">
-          <button class="lang-btn active">عربي</button>
-          <button class="lang-btn">EN</button>
+          <button id="btn-ar" class="lang-btn active">عربي</button>
+          <button id="btn-en" class="lang-btn">EN</button>
         </div>
         <div>
-          <a href="index.html" class="nav-link">الرئيسية</a>
-        
+          <a href="#" id="nav-home" class="nav-link">الرئيسية</a>
+          <a href="#" id="nav-products" class="nav-link">المنتجات</a>
+          <a href="#" id="nav-settings" class="nav-link">الإعدادات</a>
+          <a href="#" id="nav-logout" class="primary-btn">تسجيل الخروج</a>
         </div>
       </div>
     </nav>
     
     <!-- Page Header -->
     <div class="page-header">
-      <h1 class="page-title">إدارة المنتجات</h1>
-      <p class="page-subtitle">أضف منتجات جديدة وقم بإدارتها بسهولة</p>
+      <h1 class="page-title" id="page-header-title">إدارة المنتجات</h1>
+      <p class="page-subtitle" id="page-header-subtitle">أضف منتجات جديدة وقم بإدارتها بسهولة</p>
     </div>
     
     <!-- Add Product Form -->
     <div class="card">
-      <h2 style="margin-bottom: 1.5rem;">إضافة منتج جديد</h2>
+      <h2 style="margin-bottom: 1.5rem;" id="form-title">إضافة منتج جديد</h2>
       
       <form id="product-form">
         <div class="form-grid">
           <div class="form-group">
-            <label class="form-label">اسم المنتج</label>
+            <label class="form-label" id="label-name">اسم المنتج</label>
             <input type="text" class="form-input" id="product-name" placeholder="أدخل اسم المنتج" required>
           </div>
           
           <div class="form-group">
-            <label class="form-label">السعر ($)</label>
+            <label class="form-label" id="label-price">السعر ($)</label>
             <input type="number" class="form-input" id="product-price" placeholder="السعر" step="0.01" min="0" required>
           </div>
           
           <div class="form-group">
-            <label class="form-label">الفئة</label>
+            <label class="form-label" id="label-category">الفئة</label>
             <select class="form-select" id="product-category" required>
               <option value="">اختر الفئة</option>
               <option value="design">تصميم</option>
@@ -384,68 +397,314 @@
           </div>
           
           <div class="form-group">
-            <label class="form-label">الكمية المتاحة</label>
+            <label class="form-label" id="label-quantity">الكمية المتاحة</label>
             <input type="number" class="form-input" id="product-quantity" placeholder="الكمية" min="0" required>
           </div>
         </div>
         
         <div class="form-group">
-          <label class="form-label">وصف المنتج</label>
+          <label class="form-label" id="label-description">وصف المنتج</label>
           <textarea class="form-textarea" id="product-description" placeholder="أدخل وصفًا تفصيليًا للمنتج" required></textarea>
         </div>
         
         <div class="form-group">
-          <label class="form-label">صورة المنتج</label>
+          <label class="form-label" id="label-image">صورة المنتج</label>
           <div class="file-upload">
             <div class="file-upload-icon">📁</div>
-            <div class="file-upload-text">اسحب وأسقط الصورة هنا أو انقر للاختيار</div>
+            <div class="file-upload-text" id="file-upload-text">اسحب وأسقط الصورة هنا أو انقر للاختيار</div>
             <input type="file" id="product-image" accept="image/*">
           </div>
         </div>
         
         <div class="form-actions">
-          <button type="reset" class="btn btn-secondary">مسح الحقول</button>
-          <button type="submit" class="btn btn-primary">إضافة المنتج</button>
+          <button type="reset" class="btn btn-secondary" id="btn-reset">مسح الحقول</button>
+          <button type="submit" class="btn btn-primary" id="btn-submit">إضافة المنتج</button>
         </div>
       </form>
     </div>
     
     <!-- Products List -->
     <div class="card">
-      <h2 style="margin-bottom: 1.5rem;">قائمة المنتجات</h2>
+      <h2 style="margin-bottom: 1.5rem;" id="products-title">قائمة المنتجات</h2>
       
       <table class="products-table" id="products-table">
         <thead>
           <tr>
-            <th>الصورة</th>
-            <th>اسم المنتج</th>
-            <th>الفئة</th>
-            <th>السعر</th>
-            <th>الكمية</th>
-            <th>الإجراءات</th>
+            <th id="th-image">الصورة</th>
+            <th id="th-name">اسم المنتج</th>
+            <th id="th-category">الفئة</th>
+            <th id="th-price">السعر</th>
+            <th id="th-quantity">الكمية</th>
+            <th id="th-actions">الإجراءات</th>
           </tr>
         </thead>
         <tbody id="products-list">
           <!-- سيتم إضافة المنتجات هنا ديناميكيًا -->
         </tbody>
       </table>
+      <div id="empty-state" class="empty-state" style="display: none;">
+        <p id="empty-text">لا توجد منتجات مضافة حتى الآن</p>
+      </div>
     </div>
   </div>
 
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-      // Form submission handling
-      const productForm = document.getElementById('product-form');
-      const productsList = document.getElementById('products-list');
-      
-      // مصفوفة لتخزين المنتجات
-      let products = [];
-      
-      // دالة لإضافة منتج جديد إلى الجدول
+      // حالة التطبيق
+      const state = {
+        lang: localStorage.getItem('site_lang') || 'ar',
+        products: [],
+        editingProductId: null
+      };
+
+      // الترجمات
+      const translations = {
+        ar: {
+          // العناوين
+          title: "مشروعك - إدارة المنتجات",
+          brand: "مشروعك",
+          pageTitle: "إدارة المنتجات",
+          pageSubtitle: "أضف منتجات جديدة وقم بإدارتها بسهولة",
+          
+          // التنقل
+          navHome: "الرئيسية",
+          navProducts: "المنتجات",
+          navSettings: "الإعدادات",
+          navLogout: "تسجيل الخروج",
+          
+          // النموذج
+          formTitle: "إضافة منتج جديد",
+          formTitleEdit: "تعديل المنتج",
+          labelName: "اسم المنتج",
+          labelPrice: "السعر ($)",
+          labelCategory: "الفئة",
+          labelQuantity: "الكمية المتاحة",
+          labelDescription: "وصف المنتج",
+          labelImage: "صورة المنتج",
+          placeholderName: "أدخل اسم المنتج",
+          placeholderPrice: "السعر",
+          placeholderQuantity: "الكمية",
+          placeholderDescription: "أدخل وصفًا تفصيليًا للمنتج",
+          fileUploadText: "اسحب وأسقط الصورة هنا أو انقر للاختيار",
+          chooseCategory: "اختر الفئة",
+          btnReset: "مسح الحقول",
+          btnSubmit: "إضافة المنتج",
+          btnUpdate: "تحديث المنتج",
+          
+          // الجدول
+          productsTitle: "قائمة المنتجات",
+          thImage: "الصورة",
+          thName: "اسم المنتج",
+          thCategory: "الفئة",
+          thPrice: "السعر",
+          thQuantity: "الكمية",
+          thActions: "الإجراءات",
+          btnEdit: "تعديل",
+          btnDelete: "حذف",
+          
+          // حالات
+          emptyText: "لا توجد منتجات مضافة حتى الآن",
+          
+          // الرسائل
+          confirmDelete: "هل أنت متأكد من حذف المنتج \"{name}\"؟",
+          productAdded: "تم إضافة المنتج بنجاح!",
+          productUpdated: "تم تحديث المنتج بنجاح!",
+          productDeleted: "تم حذف المنتج بنجاح!",
+          fillAllFields: "يرجى ملء جميع الحقول المطلوبة",
+          editProduct: "يمكنك الآن تعديل بيانات المنتج"
+        },
+        en: {
+          // Titles
+          title: "YourSite - Products Management",
+          brand: "YourSite",
+          pageTitle: "Products Management",
+          pageSubtitle: "Add new products and manage them easily",
+          
+          // Navigation
+          navHome: "Home",
+          navProducts: "Products",
+          navSettings: "Settings",
+          navLogout: "Logout",
+          
+          // Form
+          formTitle: "Add New Product",
+          formTitleEdit: "Edit Product",
+          labelName: "Product Name",
+          labelPrice: "Price ($)",
+          labelCategory: "Category",
+          labelQuantity: "Available Quantity",
+          labelDescription: "Product Description",
+          labelImage: "Product Image",
+          placeholderName: "Enter product name",
+          placeholderPrice: "Price",
+          placeholderQuantity: "Quantity",
+          placeholderDescription: "Enter detailed product description",
+          fileUploadText: "Drag and drop image here or click to choose",
+          chooseCategory: "Choose category",
+          btnReset: "Clear Fields",
+          btnSubmit: "Add Product",
+          btnUpdate: "Update Product",
+          
+          // Table
+          productsTitle: "Products List",
+          thImage: "Image",
+          thName: "Product Name",
+          thCategory: "Category",
+          thPrice: "Price",
+          thQuantity: "Quantity",
+          thActions: "Actions",
+          btnEdit: "Edit",
+          btnDelete: "Delete",
+          
+          // States
+          emptyText: "No products added yet",
+          
+          // Messages
+          confirmDelete: "Are you sure you want to delete product \"{name}\"?",
+          productAdded: "Product added successfully!",
+          productUpdated: "Product updated successfully!",
+          productDeleted: "Product deleted successfully!",
+          fillAllFields: "Please fill all required fields",
+          editProduct: "You can now edit the product data"
+        }
+      };
+
+      // العناصر DOM
+      const elements = {
+        // العناوين
+        pageTitle: document.getElementById('page-title'),
+        brandName: document.getElementById('brand-name'),
+        pageHeaderTitle: document.getElementById('page-header-title'),
+        pageHeaderSubtitle: document.getElementById('page-header-subtitle'),
+        
+        // التنقل
+        navHome: document.getElementById('nav-home'),
+        navProducts: document.getElementById('nav-products'),
+        navSettings: document.getElementById('nav-settings'),
+        navLogout: document.getElementById('nav-logout'),
+        
+        // النموذج
+        formTitle: document.getElementById('form-title'),
+        labelName: document.getElementById('label-name'),
+        labelPrice: document.getElementById('label-price'),
+        labelCategory: document.getElementById('label-category'),
+        labelQuantity: document.getElementById('label-quantity'),
+        labelDescription: document.getElementById('label-description'),
+        labelImage: document.getElementById('label-image'),
+        productName: document.getElementById('product-name'),
+        productPrice: document.getElementById('product-price'),
+        productCategory: document.getElementById('product-category'),
+        productQuantity: document.getElementById('product-quantity'),
+        productDescription: document.getElementById('product-description'),
+        fileUploadText: document.getElementById('file-upload-text'),
+        btnReset: document.getElementById('btn-reset'),
+        btnSubmit: document.getElementById('btn-submit'),
+        productForm: document.getElementById('product-form'),
+        
+        // الجدول
+        productsTitle: document.getElementById('products-title'),
+        thImage: document.getElementById('th-image'),
+        thName: document.getElementById('th-name'),
+        thCategory: document.getElementById('th-category'),
+        thPrice: document.getElementById('th-price'),
+        thQuantity: document.getElementById('th-quantity'),
+        thActions: document.getElementById('th-actions'),
+        productsList: document.getElementById('products-list'),
+        emptyState: document.getElementById('empty-state'),
+        emptyText: document.getElementById('empty-text'),
+        
+        // أزرار اللغة
+        btnAr: document.getElementById('btn-ar'),
+        btnEn: document.getElementById('btn-en')
+      };
+
+      // تطبيق اللغة
+      function applyLanguage(lang) {
+        state.lang = lang;
+        localStorage.setItem('site_lang', lang);
+        
+        // اتجاه الصفحة والخط
+        document.documentElement.lang = lang;
+        document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+        document.body.style.fontFamily = lang === 'ar' ? '"Cairo", "Inter", system-ui' : '"Inter", "Cairo", system-ui';
+        
+        // النصوص
+        const t = translations[lang];
+        
+        // العناوين
+        elements.pageTitle.textContent = t.title;
+        elements.brandName.textContent = t.brand;
+        elements.pageHeaderTitle.textContent = t.pageTitle;
+        elements.pageHeaderSubtitle.textContent = t.pageSubtitle;
+        
+        // التنقل
+        elements.navHome.textContent = t.navHome;
+        elements.navProducts.textContent = t.navProducts;
+        elements.navSettings.textContent = t.navSettings;
+        elements.navLogout.textContent = t.navLogout;
+        
+        // النموذج
+        elements.formTitle.textContent = state.editingProductId ? t.formTitleEdit : t.formTitle;
+        elements.labelName.textContent = t.labelName;
+        elements.labelPrice.textContent = t.labelPrice;
+        elements.labelCategory.textContent = t.labelCategory;
+        elements.labelQuantity.textContent = t.labelQuantity;
+        elements.labelDescription.textContent = t.labelDescription;
+        elements.labelImage.textContent = t.labelImage;
+        elements.productName.placeholder = t.placeholderName;
+        elements.productPrice.placeholder = t.placeholderPrice;
+        elements.productQuantity.placeholder = t.placeholderQuantity;
+        elements.productDescription.placeholder = t.placeholderDescription;
+        elements.fileUploadText.textContent = t.fileUploadText;
+        elements.btnReset.textContent = t.btnReset;
+        elements.btnSubmit.textContent = state.editingProductId ? t.btnUpdate : t.btnSubmit;
+        
+        // تحديث خيارات الفئة
+        elements.productCategory.innerHTML = '';
+        const defaultOption = document.createElement('option');
+        defaultOption.value = '';
+        defaultOption.textContent = t.chooseCategory;
+        elements.productCategory.appendChild(defaultOption);
+        
+        // إضافة خيارات الفئة
+        const categories = [
+          { value: 'design', ar: 'تصميم', en: 'Design' },
+          { value: 'development', ar: 'تطوير', en: 'Development' },
+          { value: 'marketing', ar: 'تسويق', en: 'Marketing' },
+          { value: 'content', ar: 'محتوى', en: 'Content' }
+        ];
+        
+        categories.forEach(cat => {
+          const option = document.createElement('option');
+          option.value = cat.value;
+          option.textContent = lang === 'ar' ? cat.ar : cat.en;
+          elements.productCategory.appendChild(option);
+        });
+        
+        // الجدول
+        elements.productsTitle.textContent = t.productsTitle;
+        elements.thImage.textContent = t.thImage;
+        elements.thName.textContent = t.thName;
+        elements.thCategory.textContent = t.thCategory;
+        elements.thPrice.textContent = t.thPrice;
+        elements.thQuantity.textContent = t.thQuantity;
+        elements.thActions.textContent = t.thActions;
+        elements.emptyText.textContent = t.emptyText;
+        
+        // تحديث أزرار اللغة
+        elements.btnAr.classList.toggle('active', lang === 'ar');
+        elements.btnEn.classList.toggle('active', lang === 'en');
+        
+        // إعادة عرض المنتجات باللغة الجديدة
+        renderProducts();
+      }
+
+      // إضافة منتج إلى الجدول
       function addProductToTable(product) {
         const row = document.createElement('tr');
+        row.dataset.id = product.id;
         
-        // إنشاء خلية الصورة
+        // خلية الصورة
         const imageCell = document.createElement('td');
         const imageDiv = document.createElement('div');
         imageDiv.style.width = '50px';
@@ -454,40 +713,40 @@
         imageDiv.style.borderRadius = '6px';
         imageCell.appendChild(imageDiv);
         
-        // إنشاء خلية اسم المنتج
+        // خلية اسم المنتج
         const nameCell = document.createElement('td');
         nameCell.textContent = product.name;
         
-        // إنشاء خلية الفئة
+        // خلية الفئة
         const categoryCell = document.createElement('td');
         categoryCell.textContent = product.category;
         
-        // إنشاء خلية السعر
+        // خلية السعر
         const priceCell = document.createElement('td');
         priceCell.textContent = `$${product.price}`;
         
-        // إنشاء خلية الكمية
+        // خلية الكمية
         const quantityCell = document.createElement('td');
         quantityCell.textContent = product.quantity;
         
-        // إنشاء خلية الإجراءات
+        // خلية الإجراءات
         const actionsCell = document.createElement('td');
         const actionsDiv = document.createElement('div');
         actionsDiv.className = 'table-actions';
         
         const editButton = document.createElement('button');
         editButton.className = 'action-btn edit';
-        editButton.textContent = 'تعديل';
+        editButton.textContent = state.lang === 'ar' ? 'تعديل' : 'Edit';
         
         const deleteButton = document.createElement('button');
         deleteButton.className = 'action-btn delete';
-        deleteButton.textContent = 'حذف';
+        deleteButton.textContent = state.lang === 'ar' ? 'حذف' : 'Delete';
         
         actionsDiv.appendChild(editButton);
         actionsDiv.appendChild(deleteButton);
         actionsCell.appendChild(actionsDiv);
         
-        // إضافة جميع الخلايا إلى الصف
+        // إضافة الخلايا إلى الصف
         row.appendChild(imageCell);
         row.appendChild(nameCell);
         row.appendChild(categoryCell);
@@ -496,91 +755,156 @@
         row.appendChild(actionsCell);
         
         // إضافة الصف إلى الجدول
-        productsList.appendChild(row);
+        elements.productsList.appendChild(row);
         
-        // إضافة حدث لحذف المنتج
+        // حدث حذف المنتج
         deleteButton.addEventListener('click', function() {
-          const productName = nameCell.textContent;
-          if (confirm(`هل أنت متأكد من حذف المنتج "${productName}"؟`)) {
+          const t = translations[state.lang];
+          const message = t.confirmDelete.replace('{name}', product.name);
+          
+          if (confirm(message)) {
             row.remove();
-            // حذف المنتج من المصفوفة
-            products = products.filter(p => p.name !== product.name);
-            alert('تم حذف المنتج بنجاح!');
+            state.products = state.products.filter(p => p.id !== product.id);
+            checkEmptyState();
+            alert(t.productDeleted);
           }
         });
         
-        // إضافة حدث لتعديل المنتج
+        // حدث تعديل المنتج
         editButton.addEventListener('click', function() {
-          // ملء النموذح ببيانات المنتج للتعديل
-          document.getElementById('product-name').value = product.name;
-          document.getElementById('product-price').value = product.price;
-          document.getElementById('product-category').value = product.categoryValue;
-          document.getElementById('product-quantity').value = product.quantity;
-          document.getElementById('product-description').value = product.description;
+          const t = translations[state.lang];
           
-          // حذف المنتج من الجدول والمصفوفة
-          row.remove();
-          products = products.filter(p => p.name !== product.name);
+          // ملء النموذج ببيانات المنتج
+          elements.productName.value = product.name;
+          elements.productPrice.value = product.price;
+          elements.productQuantity.value = product.quantity;
+          elements.productDescription.value = product.description;
           
-          alert('يمكنك الآن تعديل بيانات المنتج');
+          // تحديد الفئة
+          for (let i = 0; i < elements.productCategory.options.length; i++) {
+            if (elements.productCategory.options[i].text === product.category) {
+              elements.productCategory.selectedIndex = i;
+              break;
+            }
+          }
+          
+          // وضع التطبيق في وضع التعديل
+          state.editingProductId = product.id;
+          
+          // تحديث واجهة المستخدم
+          applyLanguage(state.lang);
+          
+          alert(t.editProduct);
         });
       }
-      
-      // معالجة إرسال النموذج
-      productForm.addEventListener('submit', function(e) {
-        e.preventDefault();
+
+      // عرض المنتجات
+      function renderProducts() {
+        elements.productsList.innerHTML = '';
         
-        // الحصول على قيم الحقول
-        const productName = document.getElementById('product-name').value;
-        const productPrice = document.getElementById('product-price').value;
-        const productCategory = document.getElementById('product-category');
-        const productCategoryText = productCategory.options[productCategory.selectedIndex].text;
-        const productCategoryValue = productCategory.value;
-        const productQuantity = document.getElementById('product-quantity').value;
-        const productDescription = document.getElementById('product-description').value;
-        
-        // التحقق من أن جميع الحقول مملوءة
-        if (!productName || !productPrice || !productCategoryValue || !productQuantity || !productDescription) {
-          alert('يرجى ملء جميع الحقول المطلوبة');
+        if (state.products.length === 0) {
+          elements.emptyState.style.display = 'block';
           return;
         }
         
-        // إنشاء كائن المنتج
-        const product = {
-          name: productName,
-          price: parseFloat(productPrice).toFixed(2),
-          category: productCategoryText,
-          categoryValue: productCategoryValue,
-          quantity: productQuantity,
-          description: productDescription
-        };
+        elements.emptyState.style.display = 'none';
         
-        // إضافة المنتج إلى المصفوفة
-        products.push(product);
+        state.products.forEach(product => {
+          addProductToTable(product);
+        });
+      }
+
+      // التحقق من حالة الجدول الفارغ
+      function checkEmptyState() {
+        if (state.products.length === 0) {
+          elements.emptyState.style.display = 'block';
+        } else {
+          elements.emptyState.style.display = 'none';
+        }
+      }
+
+      // معالجة إرسال النموذج
+      elements.productForm.addEventListener('submit', function(e) {
+        e.preventDefault();
         
-        // إضافة المنتج إلى الجدول
-        addProductToTable(product);
+        const t = translations[state.lang];
         
-        // إظهار رسالة النجاح
-        alert('تم إضافة المنتج بنجاح!');
+        // الحصول على القيم
+        const productName = elements.productName.value;
+        const productPrice = elements.productPrice.value;
+        const productCategory = elements.productCategory;
+        const productCategoryText = productCategory.options[productCategory.selectedIndex].text;
+        const productQuantity = elements.productQuantity.value;
+        const productDescription = elements.productDescription.value;
+        
+        // التحقق من الحقول المطلوبة
+        if (!productName || !productPrice || !productCategoryText || !productQuantity || !productDescription) {
+          alert(t.fillAllFields);
+          return;
+        }
+        
+        if (state.editingProductId) {
+          // تحديث المنتج الموجود
+          const productIndex = state.products.findIndex(p => p.id === state.editingProductId);
+          if (productIndex !== -1) {
+            state.products[productIndex] = {
+              id: state.editingProductId,
+              name: productName,
+              price: parseFloat(productPrice).toFixed(2),
+              category: productCategoryText,
+              quantity: productQuantity,
+              description: productDescription
+            };
+            
+            // إعادة عرض المنتجات
+            renderProducts();
+            
+            // إظهار رسالة النجاح
+            alert(t.productUpdated);
+          }
+          
+          // الخروج من وضع التعديل
+          state.editingProductId = null;
+        } else {
+          // إنشاء منتج جديد
+          const product = {
+            id: Date.now(), // معرف فريد
+            name: productName,
+            price: parseFloat(productPrice).toFixed(2),
+            category: productCategoryText,
+            quantity: productQuantity,
+            description: productDescription
+          };
+          
+          // إضافة المنتج
+          state.products.push(product);
+          addProductToTable(product);
+          
+          // إظهار رسالة النجاح
+          alert(t.productAdded);
+        }
         
         // إعادة تعيين النموذج
-        productForm.reset();
+        this.reset();
+        checkEmptyState();
+        
+        // تحديث واجهة المستخدم
+        applyLanguage(state.lang);
       });
-      
-      // Language toggle functionality
-      const langButtons = document.querySelectorAll('.lang-btn');
-      
-      langButtons.forEach(button => {
-        button.addEventListener('click', function() {
-          langButtons.forEach(btn => btn.classList.remove('active'));
-          this.classList.add('active');
-          
-          // في تطبيق حقيقي، ستقوم بتغيير لغة الصفحة بالكامل
-          const lang = this.textContent.trim();
-          console.log('تم تغيير اللغة إلى:', lang);
-        });
+
+      // إعادة تعيين النموذج
+      elements.btnReset.addEventListener('click', function() {
+        state.editingProductId = null;
+        applyLanguage(state.lang);
       });
+
+      // أحداث أزرار اللغة
+      elements.btnAr.addEventListener('click', () => applyLanguage('ar'));
+      elements.btnEn.addEventListener('click', () => applyLanguage('en'));
+
+      // التهيئة الأولية
+      applyLanguage(state.lang);
+      checkEmptyState();
     });
   </script>
 </body>
