@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title id="page-title">مشروعك – شراء الخدمة</title>
+  <title id="page-title">مشروعك – شراء القالب</title>
 
   <!-- خطوط -->
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
@@ -122,10 +122,8 @@
           <button id="btn-en" class="lang-btn">EN</button>
         </div>
         <div>
-          <a href="product.html" class="nav-link">منتجات</a>
-          <a href="#" class="nav-link"></a>
-          <a href="#" class="nav-link"></a>
-
+          <a href="product.html" id="nav-features">منتجات</a>
+          <a href="#faq" id="nav-faq">الأسئلة</a>
           <a href="#buy" id="nav-buy" class="btn primary" style="padding:8px 12px;background:linear-gradient(45deg,var(--acc),var(--acc2));color:#071022;border-radius:10px;text-decoration:none">اشترِ الآن</a>
         </div>
       </div>
@@ -133,23 +131,23 @@
 
     <section class="hero">
       <div>
-        <span class="tag" id="tag-text">خدمة جاهزة – تحديثات مجانية</span>
-        <h1 class="h1" id="headline">حل سريع، أنيق، يحوّل الزائر إلى مشتري</h1>
-        <p class="lead" id="lead">احصل على الخدمة كاملة مع دعم فني متكامل. الشراء آمن عبر PayPal.</p>
+        <span class="tag" id="tag-text">قالب HTML/CSS جاهز – تحديثات مجانية</span>
+        <h1 class="h1" id="headline">صفحة هبوط سريعة، أنيقة، وتحوّل الزائر إلى مشتري</h1>
+        <p class="lead" id="lead">احصل على القالب كاملاً مع ملفات HTML/CSS ورسوم متحركة خفيفة، ودعم اتجاه عربي RTL. الشراء آمن عبر PayPal.</p>
 
         <div id="buy" class="card">
           <!-- خيارات الخطة -->
           <div class="options" role="tablist" aria-label="خطط الشراء">
             <div class="option active" data-key="basic" data-price="19" tabindex="0">
-              <span class="opt-name">الحزمة الأساسية</span>
+              <span class="opt-name">تصميم أساسي</span>
               <small class="opt-price">$19</small>
             </div>
             <div class="option" data-key="pro" data-price="29" tabindex="0">
-              <span class="opt-name">الحزمة المتقدمة</span>
+              <span class="opt-name">تصميم متقدم</span>
               <small class="opt-price">$29</small>
             </div>
             <div class="option" data-key="premium" data-price="49" tabindex="0">
-              <span class="opt-name">الحزمة المميزة</span>
+              <span class="opt-name">تصميم مميز</span>
               <small class="opt-price">$49</small>
             </div>
           </div>
@@ -190,7 +188,7 @@
       <h1 id="terms-title">شروط الاستخدام</h1>
       <p id="term1">1- الرجاء اختيار النوع المراد و الدفع المبلغ حسب طريقة الدفع المرغوبة</p>
       <p id="term2">2- ارسال رسالة تحتوي رقم الرسالة واذا كنت ترغب في التعديل ارسال التعديل المرغوب فيه</p>
-      <p id="term3">3- استلام الخدمة سوف يكون بعد الاختيار و الدفع</p>
+      <p id="term3">3- استلام الكود سوف يكون بعد الاختيار و الدفع</p>
       <p id="term4">4- لن يتم تسليم اي شيء في حال لم يتم الدفع</p>
     </div>
 
@@ -201,14 +199,14 @@
     // ===== i18n data =====
     const i18n = {
       ar: {
-        title: "مشروعك – شراء الخدمة",
+        title: "مشروعك – شراء القالب",
         brand: "مشروعك",
         nav_features: "المزايا",
         nav_faq: "الأسئلة",
         nav_buy: "اشترِ الآن",
-        tag: "خدمة جاهزة – تحديثات مجانية",
-        headline: "حل سريع، أنيق، يحوّل الزائر إلى مشتري",
-        lead: "احصل على الخدمة كاملة مع دعم فني متكامل. الشراء آمن عبر PayPal.",
+        tag: "قالب HTML/CSS جاهز – تحديثات مجانية",
+        headline: "صفحة هبوط سريعة، أنيقة، وتحوّل الزائر إلى مشتري",
+        lead: "احصل على القالب كاملاً مع ملفات HTML/CSS ورسوم متحركة خفيفة، ودعم اتجاه عربي RTL. الشراء آمن عبر PayPal.",
         once: "مرة واحدة",
         secure: "🔒 عملية دفع آمنة عبر PayPal – يمكنك استخدام البطاقة أو رصيدك.",
         foot: "© مشروعك – جميع الحقوق محفوظة",
@@ -221,24 +219,24 @@
         terms_title: "شروط الاستخدام",
         term1: "1- الرجاء اختيار النوع المراد و الدفع المبلغ حسب طريقة الدفع المرغوبة",
         term2: "2- ارسال رسالة تحتوي رقم الرسالة واذا كنت ترغب في التعديل ارسال التعديل المرغوب فيه",
-        term3: "3- استلام الخدمة سوف يكون بعد الاختيار و الدفع",
+        term3: "3- استلام الكود سوف يكون بعد الاختيار و الدفع",
         term4: "4- لن يتم تسليم اي شيء في حال لم يتم الدفع",
         plans: {
-          basic: "الحزمة الأساسية",
-          pro: "الحزمة المتقدمة",
-          premium: "الحزمة المميزة"
+          basic: "تصميم أساسي",
+          pro: "تصميم متقدم",
+          premium: "تصميم مميز"
         },
         currencySymbol: "$"
       },
       en: {
-        title: "YourSite – Buy Service",
+        title: "YourSite – Buy Template",
         brand: "YourSite",
         nav_features: "Features",
         nav_faq: "FAQ",
         nav_buy: "Buy Now",
-        tag: "Ready Service — Free updates",
-        headline: "Fast, elegant solution that converts visitors to buyers",
-        lead: "Get the full service with complete technical support. Payment is secure via PayPal.",
+        tag: "HTML/CSS Template — Free updates",
+        headline: "Fast, elegant landing page that converts visitors to buyers",
+        lead: "Get the full template with HTML/CSS files and light animations. Supports RTL and is PayPal ready.",
         once: "One-time",
         secure: "🔒 Secure payment via PayPal — card or balance accepted.",
         foot: "© YourSite – All rights reserved",
@@ -251,12 +249,12 @@
         terms_title: "Terms & Conditions",
         term1: "1- Please choose the desired type and pay the amount according to the preferred payment method",
         term2: "2- Send a message containing the message number and if you want any modifications, send the desired changes",
-        term3: "3- The service will be delivered after selection and payment",
+        term3: "3- The code will be delivered after selection and payment",
         term4: "4- Nothing will be delivered if payment is not completed",
         plans: {
-          basic: "Basic Package",
-          pro: "Advanced Package",
-          premium: "Premium Package"
+          basic: "Basic Design",
+          pro: "Advanced Design",
+          premium: "Premium Design"
         },
         currencySymbol: "$"
       }
@@ -418,7 +416,10 @@
         },
         onApprove: function(data, actions){
           return actions.order.capture().then(function(orderData){
+            // هنا يمكنك إضافة منطق ما بعد الدفع: تحويل لصفحة شكر أو اعطاء رابط تحميل مؤمن
             const orderId = orderData.id;
+            // على سبيل المثال نعيد توجيه لصفحة شكر مع المعطيات:
+            // window.location.href = 'thankyou.html?order=' + encodeURIComponent(orderId) + '&plan=' + encodeURIComponent(selectedKey) + '&lang=' + currentLang;
             alert((currentLang === 'en' ? 'Payment successful! Order ID: ' : 'تم الدفع بنجاح! رقم الطلب: ') + orderId);
           });
         },
@@ -430,13 +431,19 @@
     }
 
     // ===== init =====
+    // wait for PayPal SDK to load (script was defered)
     window.addEventListener('load', function(){
       paypalReady = (typeof window.paypal !== 'undefined');
+      // ensure default selection
       selectPlanByKey(selectedKey);
+      // apply language (reads saved or default)
       applyLanguage(currentLang);
+      // if there was pending render request, render now
       if(paypalReady && pendingRender) renderPayPalButton();
     });
 
+    // ensure initial UI shows correct selection & texts even before load
+    // set opt names/prices from currentLang initial data
     (function quickInitText(){
       const lang = currentLang;
       brandName.textContent = i18n[lang].brand;
