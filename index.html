@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title id="page-title">مشروعك – شراء الخدمة</title>
+
+  <!-- خطوط -->
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+
+  <!-- PayPal SDK (استبدل YOUR_CLIENT_ID بمفتاحك إن أردت) -->
+  <script src="https://www.paypal.com/sdk/js?client-id=AXCgRghjsHN78Jn0QZEGzfPX69hUALOyjXdrL-dd8TLQnjBG3du3pLqV4RaibRlUAh4t3E6doZPUDVos&currency=USD" defer></script>
+
+  <style>
+    :root{
+      --bg:#0f1221; --card:#161a2f; --text:#e9ecff; --muted:#a8b0d6;
+      --acc:#7c5cff; --acc2:#00e5a8; --shadow:0 10px 30px rgba(0,0,0,.35);
+      --radius:14px;
+    }
+    *{box-sizing:border-box}
+    html[dir="rtl"]{ direction: rtl; }
+    html[dir="ltr"]{ direction: ltr; }
+
+    body{
+      margin:0;
+      font-family:"Cairo","Inter",system-ui,-apple-system,Segoe UI,Roboto,Arial;
+      background: radial-gradient(1200px 600px at 80% -10%, rgba(124,92,255,.25), transparent),
+                  radial-gradient(1000px 500px at 10% 110%, rgba(0,229,168,.18), transparent),
+                  var(--bg);
+      color:var(--text);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
+
+    .container{max-width:1080px;margin:0 auto;padding:22px}
+    .nav{display:flex;align-items:center;justify-content:space-between;padding:8px 0;gap:12px}
+    .brand{display:flex;gap:10px;align-items:center;font-weight:800}
+    .brand .dot{width:12px;height:12px;border-radius:50%;background:linear-gradient(45deg,var(--acc),var(--acc2))}
+    .nav a{color:var(--muted);text-decoration:none;margin:0 8px;font-weight:600}
+    .lang-toggle{display:inline-flex;gap:8px;align-items:center}
+    .lang-btn{cursor:pointer;padding:6px 10px;border-radius:8px;border:1px solid rgba(255,255,255,.06);background:transparent;color:var(--muted);font-weight:700}
+    .lang-btn.active{background:linear-gradient(45deg,var(--acc),var(--acc2));color:#071022}
+
+    .hero{display:grid;grid-template-columns:1.1fr .9fr;gap:26px;align-items:center;margin:18px 0}
+    .h1{font-size:40px;line-height:1.15;margin:0 0 10px;font-weight:800}
+    .lead{color:var(--muted);font-size:16px;margin:0 0 14px}
+    .card{background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,.01));border:1px solid rgba(255,255,255,.06);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow)}
+    .tag{display:inline-flex;align-items:center;gap:8px;background:rgba(124,92,255,.12);border-radius:999px;padding:6px 10px;font-size:13px;color:#e8dfff;margin-bottom:10px}
+
+    .options{display:flex;gap:10px;margin:12px 0;justify-content:center}
+    .option{flex:1;padding:12px;border-radius:12px;background:#12162a;border:1px solid rgba(255,255,255,.04);text-align:center;cursor:pointer;transition:.16s;font-weight:700}
+    .option small{display:block;margin-top:8px;color:var(--muted);font-weight:600}
+    .option.active{border:2px solid var(--acc);background:linear-gradient(45deg,var(--acc),var(--acc2));color:#071022}
+
+    .price-row{display:flex;align-items:center;gap:12px;justify-content:center;margin-top:6px}
+    .big-price{font-size:36px;font-weight:900}
+    .muted{color:var(--muted)}
+
+    #paypal-button-container{margin-top:14px}
+
+    /* أنماط النموذج */
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    label {
+      font-weight: 600;
+      color: var(--text);
+    }
+    input, textarea {
+      padding: 10px 14px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,.1);
+      background: rgba(255,255,255,.05);
+      color: var(--text);
+      font-family: inherit;
+    }
+    button[type="submit"] {
+      background: linear-gradient(45deg,var(--acc),var(--acc2));
+      color: #071022;
+      border: none;
+      padding: 12px;
+      border-radius: 8px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 8px;
+    }
+
+    /* أنماط قسم الشروط */
+    .terms {
+      margin: 30px 0;
+      padding: 20px;
+      background: var(--card);
+      border-radius: var(--radius);
+      border: 1px solid rgba(255,255,255,.06);
+    }
+    .terms h1 {
+      font-size: 28px;
+      margin-bottom: 16px;
+      color: var(--text);
+    }
+    .terms p {
+      margin: 10px 0;
+      line-height: 1.6;
+    }
+
+    @media(max-width:900px){
+      .hero{grid-template-columns:1fr}
+      .nav{flex-direction:column;align-items:flex-start;gap:10px}
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <nav class="nav">
+      <div class="brand"><span class="dot"></span> <span id="brand-name">مشروعك</span></div>
+
+      <div style="display:flex;gap:12px;align-items:center">
+        <div class="lang-toggle" aria-hidden="false">
+          <button id="btn-ar" class="lang-btn">عربي</button>
+          <button id="btn-en" class="lang-btn">EN</button>
+        </div>
+        <div>
+          <a href="product.html" class="nav-link">منتجات</a>
+          <a href="#" class="nav-link"></a>
+          <a href="#" class="nav-link"></a>
+
+          <a href="#buy" id="nav-buy" class="btn primary" style="padding:8px 12px;background:linear-gradient(45deg,var(--acc),var(--acc2));color:#071022;border-radius:10px;text-decoration:none">اشترِ الآن</a>
+        </div>
+      </div>
+    </nav>
+
+    <section class="hero">
+      <div>
+        <span class="tag" id="tag-text">خدمة جاهزة – تحديثات مجانية</span>
+        <h1 class="h1" id="headline">حل سريع، أنيق، يحوّل الزائر إلى مشتري</h1>
+        <p class="lead" id="lead">احصل على الخدمة كاملة مع دعم فني متكامل. الشراء آمن عبر PayPal.</p>
+
+        <div id="buy" class="card">
+          <!-- خيارات الخطة -->
+          <div class="options" role="tablist" aria-label="خطط الشراء">
+            <div class="option active" data-key="basic" data-price="19" tabindex="0">
+              <span class="opt-name">الحزمة الأساسية</span>
+              <small class="opt-price">$19</small>
+            </div>
+            <div class="option" data-key="pro" data-price="29" tabindex="0">
+              <span class="opt-name">الحزمة المتقدمة</span>
+              <small class="opt-price">$29</small>
+            </div>
+            <div class="option" data-key="premium" data-price="49" tabindex="0">
+              <span class="opt-name">الحزمة المميزة</span>
+              <small class="opt-price">$49</small>
+            </div>
+          </div>
+
+          <div class="price-row">
+            <div class="muted" id="price-label">السعر الآن</div>
+            <div class="big-price" id="big-price">$19.00</div>
+            <div class="muted" id="once-text">مرة واحدة</div>
+          </div>
+
+          <!-- PayPal buttons -->
+          <div id="paypal-button-container" aria-live="polite"></div>
+
+          <div class="muted" style="text-align:center;margin-top:10px" id="secure-text">🔒 عملية دفع آمنة عبر PayPal – يمكنك استخدام البطاقة أو رصيدك.</div>
+        </div>
+      </div>
+
+     <!-- مربع إرسال الرسالة -->
+      <div class="card">
+        <h3 id="contact-title">📩 أرسل لنا رسالة</h3>
+        <form action="https://formspree.io/f/xxxxxx" method="POST">
+          <label id="name-label">الاسم:</label>
+          <input type="text" name="name" required>
+
+          <label id="email-label">البريد الإلكتروني:</label>
+          <input type="email" name="email" required>
+
+          <label id="message-label">الرسالة:</label>
+          <textarea name="message" rows="5" required></textarea>
+
+          <button type="submit" id="submit-btn">إرسال</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- قسم الشروط والأحكام -->
+    <div class="terms card">
+      <h1 id="terms-title">شروط الاستخدام</h1>
+      <p id="term1">1- الرجاء اختيار النوع المراد و الدفع المبلغ حسب طريقة الدفع المرغوبة</p>
+      <p id="term2">2- ارسال رسالة تحتوي رقم الرسالة واذا كنت ترغب في التعديل ارسال التعديل المرغوب فيه</p>
+      <p id="term3">3- استلام الخدمة سوف يكون بعد الاختيار و الدفع</p>
+      <p id="term4">4- لن يتم تسليم اي شيء في حال لم يتم الدفع</p>
+    </div>
+
+    <footer style="margin-top:22px;text-align:center;color:var(--muted)" id="footer-text">© مشروعك – جميع الحقوق محفوظة</footer>
+  </div>
+
+  <script>
+    // ===== i18n data =====
+    const i18n = {
+      ar: {
+        title: "مشروعك – شراء الخدمة",
+        brand: "مشروعك",
+        nav_features: "المزايا",
+        nav_faq: "الأسئلة",
+        nav_buy: "اشترِ الآن",
+        tag: "خدمة جاهزة – تحديثات مجانية",
+        headline: "حل سريع، أنيق، يحوّل الزائر إلى مشتري",
+        lead: "احصل على الخدمة كاملة مع دعم فني متكامل. الشراء آمن عبر PayPal.",
+        once: "مرة واحدة",
+        secure: "🔒 عملية دفع آمنة عبر PayPal – يمكنك استخدام البطاقة أو رصيدك.",
+        foot: "© مشروعك – جميع الحقوق محفوظة",
+        priceLabel: "السعر الآن",
+        contact_title: "📩 أرسل لنا رسالة",
+        name_label: "الاسم:",
+        email_label: "البريد الإلكتروني:",
+        message_label: "الرسالة:",
+        submit_btn: "إرسال",
+        terms_title: "شروط الاستخدام",
+        term1: "1- الرجاء اختيار النوع المراد و الدفع المبلغ حسب طريقة الدفع المرغوبة",
+        term2: "2- ارسال رسالة تحتوي رقم الرسالة واذا كنت ترغب في التعديل ارسال التعديل المرغوب فيه",
+        term3: "3- استلام الخدمة سوف يكون بعد الاختيار و الدفع",
+        term4: "4- لن يتم تسليم اي شيء في حال لم يتم الدفع",
+        plans: {
+          basic: "الحزمة الأساسية",
+          pro: "الحزمة المتقدمة",
+          premium: "الحزمة المميزة"
+        },
+        currencySymbol: "$"
+      },
+      en: {
+        title: "YourSite – Buy Service",
+        brand: "YourSite",
+        nav_features: "Features",
+        nav_faq: "FAQ",
+        nav_buy: "Buy Now",
+        tag: "Ready Service — Free updates",
+        headline: "Fast, elegant solution that converts visitors to buyers",
+        lead: "Get the full service with complete technical support. Payment is secure via PayPal.",
+        once: "One-time",
+        secure: "🔒 Secure payment via PayPal — card or balance accepted.",
+        foot: "© YourSite – All rights reserved",
+        priceLabel: "Price now",
+        contact_title: "📩 Contact Us",
+        name_label: "Name:",
+        email_label: "Email:",
+        message_label: "Message:",
+        submit_btn: "Send",
+        terms_title: "Terms & Conditions",
+        term1: "1- Please choose the desired type and pay the amount according to the preferred payment method",
+        term2: "2- Send a message containing the message number and if you want any modifications, send the desired changes",
+        term3: "3- The service will be delivered after selection and payment",
+        term4: "4- Nothing will be delivered if payment is not completed",
+        plans: {
+          basic: "Basic Package",
+          pro: "Advanced Package",
+          premium: "Premium Package"
+        },
+        currencySymbol: "$"
+      }
+    };
+
+    // ===== state =====
+    let selectedKey = 'basic';
+    let selectedPrice = 19.00;
+    let currentLang = localStorage.getItem('site_lang') || 'ar';
+    let paypalReady = false;
+    let pendingRender = false;
+
+    // ===== elements =====
+    const btnAr = document.getElementById('btn-ar');
+    const btnEn = document.getElementById('btn-en');
+    const brandName = document.getElementById('brand-name');
+    const navFeatures = document.getElementById('nav-features');
+    const navFaq = document.getElementById('nav-faq');
+    const navBuy = document.getElementById('nav-buy');
+    const tagText = document.getElementById('tag-text');
+    const headline = document.getElementById('headline');
+    const lead = document.getElementById('lead');
+    const onceText = document.getElementById('once-text');
+    const secureText = document.getElementById('secure-text');
+    const footerText = document.getElementById('footer-text');
+    const priceLabel = document.getElementById('price-label');
+    const contactTitle = document.getElementById('contact-title');
+    const nameLabel = document.getElementById('name-label');
+    const emailLabel = document.getElementById('email-label');
+    const messageLabel = document.getElementById('message-label');
+    const submitBtn = document.getElementById('submit-btn');
+    const termsTitle = document.getElementById('terms-title');
+    const term1 = document.getElementById('term1');
+    const term2 = document.getElementById('term2');
+    const term3 = document.getElementById('term3');
+    const term4 = document.getElementById('term4');
+
+    const opts = document.querySelectorAll('.option');
+    const bigPriceEl = document.getElementById('big-price');
+    const paypalContainer = document.getElementById('paypal-button-container');
+
+    // ===== helper =====
+    function formatPrice(v){
+      return v.toFixed(2);
+    }
+
+    // تطبيق اللغة على جميع العناصر
+    function applyLanguage(lang){
+      currentLang = lang;
+      localStorage.setItem('site_lang', lang);
+
+      // direction & font
+      if(lang === 'ar'){
+        document.documentElement.lang = 'ar';
+        document.documentElement.dir = 'rtl';
+        document.body.style.fontFamily = '"Cairo","Inter",system-ui';
+      } else {
+        document.documentElement.lang = 'en';
+        document.documentElement.dir = 'ltr';
+        document.body.style.fontFamily = '"Inter","Cairo",system-ui';
+      }
+
+      // texts
+      document.getElementById('page-title').textContent = i18n[lang].title;
+      brandName.textContent = i18n[lang].brand;
+      navFeatures.textContent = i18n[lang].nav_features;
+      navFaq.textContent = i18n[lang].nav_faq;
+      navBuy.textContent = i18n[lang].nav_buy;
+      tagText.textContent = i18n[lang].tag;
+      headline.textContent = i18n[lang].headline;
+      lead.textContent = i18n[lang].lead;
+      onceText.textContent = i18n[lang].once;
+      secureText.textContent = i18n[lang].secure;
+      footerText.textContent = i18n[lang].foot;
+      priceLabel.textContent = i18n[lang].priceLabel;
+      contactTitle.textContent = i18n[lang].contact_title;
+      nameLabel.textContent = i18n[lang].name_label;
+      emailLabel.textContent = i18n[lang].email_label;
+      messageLabel.textContent = i18n[lang].message_label;
+      submitBtn.textContent = i18n[lang].submit_btn;
+      termsTitle.textContent = i18n[lang].terms_title;
+      term1.textContent = i18n[lang].term1;
+      term2.textContent = i18n[lang].term2;
+      term3.textContent = i18n[lang].term3;
+      term4.textContent = i18n[lang].term4;
+
+      // update options labels (plan names and small price)
+      opts.forEach(el=>{
+        const key = el.getAttribute('data-key');
+        const price = parseFloat(el.getAttribute('data-price'));
+        el.querySelector('.opt-name').textContent = i18n[lang].plans[key];
+        // opt-price element
+        const small = el.querySelector('.opt-price');
+        small.textContent = i18n[lang].currencySymbol + formatPrice(price);
+      });
+
+      // update big price text
+      bigPriceEl.textContent = i18n[lang].currencySymbol + formatPrice(selectedPrice);
+
+      // update language button active state
+      btnAr.classList.toggle('active', lang === 'ar');
+      btnEn.classList.toggle('active', lang === 'en');
+
+      // re-render PayPal to ensure description matches language
+      renderPayPalButton();
+    }
+
+    // اختيار خطة
+    function selectPlanByKey(key){
+      const el = Array.from(opts).find(x => x.getAttribute('data-key') === key);
+      if(!el) return;
+      opts.forEach(o => o.classList.remove('active'));
+      el.classList.add('active');
+      selectedKey = key;
+      selectedPrice = parseFloat(el.getAttribute('data-price'));
+      // تحديث السعر المعروض
+      bigPriceEl.textContent = i18n[currentLang].currencySymbol + formatPrice(selectedPrice);
+      // إعادة إنشاء زر باي بال
+      renderPayPalButton();
+    }
+
+    // استماع للأزرار
+    btnAr.addEventListener('click', ()=> applyLanguage('ar'));
+    btnEn.addEventListener('click', ()=> applyLanguage('en'));
+
+    opts.forEach(el=>{
+      el.addEventListener('click', ()=>{
+        selectPlanByKey(el.getAttribute('data-key'));
+      });
+      // دعم الوصول عبر لوحة المفاتيح
+      el.addEventListener('keydown', (e)=>{
+        if(e.key === 'Enter' || e.key === ' ') { e.preventDefault(); selectPlanByKey(el.getAttribute('data-key')); }
+      });
+    });
+
+    // ===== PayPal rendering =====
+    function renderPayPalButton(){
+      // if paypal SDK not loaded yet -> mark pending and return
+      if(typeof window.paypal === 'undefined'){
+        pendingRender = true;
+        return;
+      }
+      pendingRender = false;
+      paypalContainer.innerHTML = '';
+
+      // localize description by using currentLang & selectedKey
+      const desc = (i18n[currentLang] && i18n[currentLang].plans[selectedKey]) ? i18n[currentLang].plans[selectedKey] : selectedKey;
+      const amountStr = formatPrice(selectedPrice);
+
+      paypal.Buttons({
+        style: { shape:'pill', layout:'vertical', label:'paypal', height:45 },
+        createOrder: function(data, actions){
+          return actions.order.create({
+            purchase_units: [{
+              description: desc,
+              amount: { currency_code: 'USD', value: amountStr }
+            }]
+          });
+        },
+        onApprove: function(data, actions){
+          return actions.order.capture().then(function(orderData){
+            const orderId = orderData.id;
+            alert((currentLang === 'en' ? 'Payment successful! Order ID: ' : 'تم الدفع بنجاح! رقم الطلب: ') + orderId);
+          });
+        },
+        onError: function(err){
+          console.error('PayPal error', err);
+          alert(currentLang === 'en' ? 'Payment error, please try again.' : 'حدث خطأ أثناء الدفع، حاول مرة أخرى.');
+        }
+      }).render('#paypal-button-container');
+    }
+
+    // ===== init =====
+    window.addEventListener('load', function(){
+      paypalReady = (typeof window.paypal !== 'undefined');
+      selectPlanByKey(selectedKey);
+      applyLanguage(currentLang);
+      if(paypalReady && pendingRender) renderPayPalButton();
+    });
+
+    (function quickInitText(){
+      const lang = currentLang;
+      brandName.textContent = i18n[lang].brand;
+      tagText.textContent = i18n[lang].tag;
+      headline.textContent = i18n[lang].headline;
+      lead.textContent = i18n[lang].lead;
+      opts.forEach(el=>{
+        const key = el.getAttribute('data-key');
+        el.querySelector('.opt-name').textContent = i18n[lang].plans[key];
+        el.querySelector('.opt-price').textContent = i18n[lang].currencySymbol + formatPrice(parseFloat(el.getAttribute('data-price')));
+      });
+      bigPriceEl.textContent = i18n[lang].currencySymbol + formatPrice(selectedPrice);
+      btnAr.classList.toggle('active', lang === 'ar');
+      btnEn.classList.toggle('active', lang === 'en');
+    })();
+
+  </script>
+</body>
+</html>

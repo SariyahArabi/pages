@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>مشروعك - إدارة المنتجات</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0f1221;
+      --card: #161a2f;
+      --text: #e9ecff;
+      --muted: #a8b0d6;
+      --acc: #7c5cff;
+      --acc2: #00e5a8;
+      --shadow: 0 10px 30px rgba(0,0,0,0.35);
+      --radius: 14px;
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: "Cairo", "Inter", system-ui, -apple-system, sans-serif;
+      background: 
+        radial-gradient(1200px 600px at 80% -10%, rgba(124,92,255,0.25), transparent),
+        radial-gradient(1000px 500px at 10% 110%, rgba(0,229,168,0.18), transparent),
+        var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      padding: 20px;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    /* Navigation */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 0;
+      margin-bottom: 2rem;
+    }
+    
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-weight: 800;
+      font-size: 1.2rem;
+    }
+    
+    .brand-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: linear-gradient(45deg, var(--acc), var(--acc2));
+    }
+    
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+    
+    .nav-link {
+      color: var(--muted);
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.2s;
+    }
+    
+    .nav-link:hover {
+      color: var(--text);
+    }
+    
+    .primary-btn {
+      background: linear-gradient(45deg, var(--acc), var(--acc2));
+      color: #071022;
+      padding: 0.5rem 1rem;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: 600;
+      display: inline-block;
+    }
+    
+    /* Language Toggle */
+    .lang-toggle {
+      display: flex;
+      gap: 0.5rem;
+      margin-right: 1rem;
+    }
+    
+    .lang-btn {
+      cursor: pointer;
+      padding: 0.4rem 0.8rem;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.06);
+      background: transparent;
+      color: var(--muted);
+      font-weight: 700;
+      transition: all 0.2s;
+    }
+    
+    .lang-btn.active {
+      background: linear-gradient(45deg, var(--acc), var(--acc2));
+      color: #071022;
+    }
+    
+    /* Page Header */
+    .page-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    
+    .page-title {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(45deg, var(--acc), var(--acc2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .page-subtitle {
+      color: var(--muted);
+      font-size: 1.1rem;
+    }
+    
+    /* Card */
+    .card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+      margin-bottom: 2rem;
+    }
+    
+    /* Form Styles */
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+    
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+    
+    .form-label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: var(--text);
+    }
+    
+    .form-input, .form-select, .form-textarea {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.05);
+      color: var(--text);
+      font-family: inherit;
+      transition: all 0.2s;
+    }
+    
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+      outline: none;
+      border-color: var(--acc);
+      box-shadow: 0 0 0 2px rgba(124,92,255,0.2);
+    }
+    
+    .form-textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+    
+    .file-upload {
+      position: relative;
+      border: 2px dashed rgba(255,255,255,0.1);
+      border-radius: 8px;
+      padding: 2rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .file-upload:hover {
+      border-color: var(--acc);
+    }
+    
+    .file-upload input {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      opacity: 0;
+      cursor: pointer;
+    }
+    
+    .file-upload-icon {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+      color: var(--muted);
+    }
+    
+    .file-upload-text {
+      color: var(--muted);
+    }
+    
+    .form-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: flex-end;
+      margin-top: 2rem;
+    }
+    
+    .btn {
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: none;
+    }
+    
+    .btn-primary {
+      background: linear-gradient(45deg, var(--acc), var(--acc2));
+      color: #071022;
+    }
+    
+    .btn-secondary {
+      background: rgba(255,255,255,0.05);
+      color: var(--text);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow);
+    }
+    
+    /* Products Table */
+    .products-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 2rem;
+    }
+    
+    .products-table th, .products-table td {
+      padding: 1rem;
+      text-align: right;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    
+    .products-table th {
+      background: rgba(255,255,255,0.03);
+      font-weight: 600;
+      color: var(--muted);
+    }
+    
+    .products-table tr:hover {
+      background: rgba(255,255,255,0.02);
+    }
+    
+    .table-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+    
+    .action-btn {
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      background: rgba(255,255,255,0.05);
+      color: var(--text);
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .action-btn.edit {
+      color: var(--acc2);
+    }
+    
+    .action-btn.delete {
+      color: #ff4757;
+    }
+    
+    .action-btn:hover {
+      background: rgba(255,255,255,0.1);
+    }
+    
+    /* Responsive */
+    @media (max-width: 900px) {
+      .navbar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+      }
+      
+      .nav-links {
+        width: 100%;
+        justify-content: space-between;
+        flex-wrap: wrap;
+      }
+      
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .form-actions {
+        flex-direction: column;
+      }
+      
+      .products-table {
+        display: block;
+        overflow-x: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Navigation -->
+    <nav class="navbar">
+      <div class="brand">
+        <span class="brand-dot"></span>
+        <span>مشروعك</span>
+      </div>
+      
+      <div class="nav-links">
+        <div class="lang-toggle">
+          <button class="lang-btn active">عربي</button>
+          <button class="lang-btn">EN</button>
+        </div>
+        <div>
+          <a href="index.html" class="nav-link">الرئيسية</a>
+          <a href="#" class="nav-link"></a>
+          <a href="#" class="nav-link"></a>
+          <a href="#" class="primary-btn"></a>
+        </div>
+      </div>
+    </nav>
+    
+    <!-- Page Header -->
+    <div class="page-header">
+      <h1 class="page-title">إدارة المنتجات</h1>
+      <p class="page-subtitle">أضف منتجات جديدة وقم بإدارتها بسهولة</p>
+    </div>
+    
+    <!-- Add Product Form -->
+    <div class="card">
+      <h2 style="margin-bottom: 1.5rem;">إضافة منتج جديد</h2>
+      
+      <form id="product-form">
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">اسم المنتج</label>
+            <input type="text" class="form-input" placeholder="أدخل اسم المنتج" required>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">السعر ($)</label>
+            <input type="number" class="form-input" placeholder="السعر" step="0.01" min="0" required>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">الفئة</label>
+            <select class="form-select" required>
+              <option value="">اختر الفئة</option>
+              <option value="design">تصميم</option>
+              <option value="development">تطوير</option>
+              <option value="marketing">تسويق</option>
+              <option value="content">محتوى</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">الكمية المتاحة</label>
+            <input type="number" class="form-input" placeholder="الكمية" min="0" required>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label">وصف المنتج</label>
+          <textarea class="form-textarea" placeholder="أدخل وصفًا تفصيليًا للمنتج" required></textarea>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label">صورة المنتج</label>
+          <div class="file-upload">
+            <div class="file-upload-icon">📁</div>
+            <div class="file-upload-text">اسحب وأسقط الصورة هنا أو انقر للاختيار</div>
+            <input type="file" accept="image/*">
+          </div>
+        </div>
+        
+        <div class="form-actions">
+          <button type="reset" class="btn btn-secondary">مسح الحقول</button>
+          <button type="submit" class="btn btn-primary">إضافة المنتج</button>
+        </div>
+      </form>
+    </div>
+    
+    <!-- Products List -->
+    <div class="card">
+      <h2 style="margin-bottom: 1.5rem;">قائمة المنتجات</h2>
+      
+      <table class="products-table">
+        <thead>
+          <tr>
+            <th>الصورة</th>
+            <th>اسم المنتج</th>
+            <th>الفئة</th>
+            <th>السعر</th>
+            <th>الكمية</th>
+            <th>الإجراءات</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><div style="width: 50px; height: 50px; background: rgba(255,255,255,0.1); border-radius: 6px;"></div></td>
+            <td>تصميم شعار احترافي</td>
+            <td>تصميم</td>
+            <td>$49.99</td>
+            <td>10</td>
+            <td>
+              <div class="table-actions">
+                <button class="action-btn edit">تعديل</button>
+                <button class="action-btn delete">حذف</button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td><div style="width: 50px; height: 50px; background: rgba(255,255,255,0.1); border-radius: 6px;"></div></td>
+            <td>تطبيق جوال</td>
+            <td>تطوير</td>
+            <td>$299.99</td>
+            <td>5</td>
+            <td>
+              <div class="table-actions">
+                <button class="action-btn edit">تعديل</button>
+                <button class="action-btn delete">حذف</button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td><div style="width: 50px; height: 50px; background: rgba(255,255,255,0.1); border-radius: 6px;"></div></td>
+            <td>حملة تسويقية</td>
+            <td>تسويق</td>
+            <td>$149.99</td>
+            <td>8</td>
+            <td>
+              <div class="table-actions">
+                <button class="action-btn edit">تعديل</button>
+                <button class="action-btn delete">حذف</button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Form submission handling
+      const productForm = document.getElementById('product-form');
+      
+      productForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Get form values
+        const productName = this.querySelector('input[type="text"]').value;
+        const productPrice = this.querySelector('input[type="number"]').value;
+        const productCategory = this.querySelector('select').value;
+        const productQuantity = this.querySelector('input[type="number"]:nth-child(2)').value;
+        const productDescription = this.querySelector('textarea').value;
+        
+        // In a real app, you would send this data to a server
+        console.log('تم إضافة المنتج:', {
+          productName,
+          productPrice,
+          productCategory,
+          productQuantity,
+          productDescription
+        });
+        
+        // Show success message
+        alert('تم إضافة المنتج بنجاح!');
+        
+        // Reset form
+        this.reset();
+      });
+      
+      // Language toggle functionality
+      const langButtons = document.querySelectorAll('.lang-btn');
+      
+      langButtons.forEach(button => {
+        button.addEventListener('click', function() {
+          langButtons.forEach(btn => btn.classList.remove('active'));
+          this.classList.add('active');
+          
+          // In a real app, you would change the language of the entire page
+          const lang = this.textContent.trim();
+          console.log('تم تغيير اللغة إلى:', lang);
+        });
+      });
+      
+      // Delete button functionality
+      const deleteButtons = document.querySelectorAll('.action-btn.delete');
+      
+      deleteButtons.forEach(button => {
+        button.addEventListener('click', function() {
+          const productRow = this.closest('tr');
+          const productName = productRow.querySelector('td:nth-child(2)').textContent;
+          
+          if (confirm(`هل أنت متأكد من حذف المنتج "${productName}"؟`)) {
+            productRow.remove();
+            console.log('تم حذف المنتج:', productName);
+            alert('تم حذف المنتج بنجاح!');
+          }
+        });
+      });
+      
+      // Edit button functionality
+      const editButtons = document.querySelectorAll('.action-btn.edit');
+      
+      editButtons.forEach(button => {
+        button.addEventListener('click', function() {
+          const productRow = this.closest('tr');
+          const productName = productRow.querySelector('td:nth-child(2)').textContent;
+          
+          // In a real app, you would populate the form with the product data
+          console.log('تحرير المنتج:', productName);
+          alert(`سيتم فتح نموذج تحرير المنتج: ${productName}`);
+        });
+      });
+    });
+  </script>
+</body>
+</html>
